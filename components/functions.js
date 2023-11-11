@@ -3,7 +3,7 @@
 
 function displaySidebar(role, page) {
 
-    let sidebar_id = (role == 'client') ? [1, 4, 5, 6, 7] : [1, 2, 3, 5, 6];
+    let sidebar_id = (role == 'client') ? [1, 4, 5, 7] : [1, 2, 3, 5, 6];
         
     $.ajax({
         url: '../controller/SidebarController.php',
@@ -13,6 +13,9 @@ function displaySidebar(role, page) {
             case: 'sidebar_list'
         },
         success: function(data) {
+
+            // Variables
+            let isReports = false;
 
             // Append Sidebar
             data.forEach(element => {
@@ -50,7 +53,10 @@ function displaySidebar(role, page) {
                         let tree_p = $("<p>"+element[0]+"</p>");
 
                         // Active Class
-                        if(GetURLParameter('link') == element[1]) { tree_a.addClass('active') }
+                        if(GetURLParameter('link') == element[1]) {  
+                            tree_a.addClass('active');
+                            isReports = true;
+                        }
 
                         tree_a.append(tree_i).append(tree_p);
                         tree_li.append(tree_a);
@@ -80,6 +86,9 @@ function displaySidebar(role, page) {
 
                 // Append List to ul
                 $('#sidebar-ul-id').append(li);
+
+                // Trigger Click On Reports Sidebar if Active
+                if(isReports) { $($('#sidebar-ul-id a')[4]).trigger('click'); }
 
             });
 
